@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import data from "../../utils/data";
+// import data from "../../utils/data";
 import "./style.css";
 
 const FileExplorer = () => {
@@ -8,18 +8,18 @@ const FileExplorer = () => {
 
   useEffect(() => {
     // Fetch folder and file data from the backend
-    // fetch("http://localhost:8000/api/directory/")
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setDirectory(data);
-    //     console.log("data", data);
-    //   })
-    //   .catch((error) => console.error("Error fetching data:", error));
-    setDirectory(data);
+    fetch("http://localhost:8000/api/directory/root")
+      .then((response) => response.json())
+      .then((data) => {
+        setDirectory(data);
+        console.log("data", data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+    // setDirectory(data);
   }, []);
 
   const getFolderId = (directory_id) => {
-    if (directory_id !== null) {
+    if (directory_id !== null && directory_id !== undefined) {
       let len = directory_id.length;
       return `folder_${directory_id.slice(len - 5, len)}`;
     }
@@ -42,6 +42,13 @@ const FileExplorer = () => {
     e.stopPropagation();
   };
 
+  const newFolder = (e) => {
+    e.stopPropagation();
+  };
+  const newFile = (e) => {
+    e.stopPropagation();
+  };
+
   // Function to render a directory recursively
   const renderDirectory = (directory, level) => {
     // console.log(directory);
@@ -52,8 +59,9 @@ const FileExplorer = () => {
         data-directory-id={directory._id}
         onClick={toggleSubfolders}
       >
-        {"-".repeat(level)}
-        {directory.name}
+        {"─".repeat(level)}
+        {directory.name} |<span onClick={newFolder}>+ folder</span> |{" "}
+        <span onClick={newFile}>+ file</span>{" "}
         {directory.directories && directory.directories.length > 0 && (
           <div
             className="subfolders"
@@ -74,7 +82,7 @@ const FileExplorer = () => {
           {directory.files &&
             directory.files.map((file) => (
               <div key={file._id} className="file">
-                {"-".repeat(level + 1)}
+                {"─".repeat(level + 1)}
                 {file.name}
               </div>
             ))}
