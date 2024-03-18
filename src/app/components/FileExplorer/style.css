@@ -1,0 +1,13 @@
+.folder,
+.subfolders {
+    cursor: pointer;
+}
+
+.subfolders, .files {
+    display: none;
+    margin: 10px 0;
+}
+
+.subfolders.visible, .files.visible {
+    display: block;
+}
