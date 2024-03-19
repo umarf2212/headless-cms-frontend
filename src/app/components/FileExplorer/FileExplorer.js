@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 // import data from "../../utils/data";
 import "./style.css";
+import createNewFolder from "@/app/utils/createNewFolder";
 
 const FileExplorer = () => {
   const [directory, setDirectory] = useState(null);
@@ -30,6 +31,8 @@ const FileExplorer = () => {
     let targetSubfolders = e.target.dataset["directoryId"];
     let subfolder = document.getElementById(getFolderId(targetSubfolders));
 
+    if (subfolder === null || subfolder === undefined) return;
+
     //check if class already exists
     if ([...subfolder.classList].includes("visible")) {
       subfolder.classList.remove("visible");
@@ -42,9 +45,57 @@ const FileExplorer = () => {
     e.stopPropagation();
   };
 
+  const handleTextInputRemove = (event) => {
+    event.target.parentNode.removeChild(event.target);
+  };
+
   const newFolder = (e) => {
     e.stopPropagation();
+    console.log("here", e);
+    let parentFolderId = e.target.dataset["directoryId"];
+    let parentFolder = document.getElementById(getFolderId(parentFolderId));
+
+    let folderNameInput = document.createElement("input");
+    folderNameInput.setAttribute("type", "text");
+    folderNameInput.setAttribute("id", `name_${parentFolder}`);
+
+    parentFolder.prepend(folderNameInput);
+
+    // if input is out of focus, remove the text input
+    folderNameInput.addEventListener("blur", handleTextInputRemove);
+
+    folderNameInput.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        folderNameInput.removeEventListener("blur", handleTextInputRemove);
+        handleTextInputRemove(event);
+      }
+
+      if (event.key === "Enter") {
+        if (folderNameInput.value.trim() !== "") {
+          let folderName = folderNameInput.value.trim();
+          // console.log("here", folderName, parentFolderId);
+          createNewFolder(parentFolderId, folderName)
+            .then((response) => {
+              if (response.status === 201) {
+                console.log("Directory added successfully");
+                folderNameInput.removeEventListener(
+                  "blur",
+                  handleTextInputRemove
+                );
+                handleTextInputRemove(event);
+              } else {
+                console.log("Unexpected HTTP status code:", response.status);
+              }
+            })
+            .catch((error) => {
+              console.error("Error during API call:", error);
+            });
+        }
+      }
+    });
   };
+
   const newFile = (e) => {
     e.stopPropagation();
   };
@@ -56,12 +107,18 @@ const FileExplorer = () => {
       <div
         key={directory._id}
         className="folder"
-        data-directory-id={directory._id}
         onClick={toggleSubfolders}
+        data-directory-id={directory._id}
       >
         {"─".repeat(level)}
-        {directory.name} |<span onClick={newFolder}>+ folder</span> |{" "}
-        <span onClick={newFile}>+ file</span>{" "}
+        {directory.name} |
+        <span onClick={newFolder} data-directory-id={directory._id}>
+          + folder
+        </span>{" "}
+        |{" "}
+        <span onClick={newFile} data-directory-id={directory._id}>
+          + file
+        </span>{" "}
         {directory.directories && directory.directories.length > 0 && (
           <div
             className="subfolders"
