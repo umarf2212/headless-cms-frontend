@@ -1,11 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 // import data from "../../utils/data";
 import "./style.css";
 import createNewFolder from "@/app/utils/createNewFolder";
+import SharedDataContext from "../Contexts/SharedDataContext";
 
 const FileExplorer = () => {
   const [directory, setDirectory] = useState(null);
+  const { setParentFolderId } = useContext(SharedDataContext);
 
   useEffect(() => {
     // Fetch folder and file data from the backend
@@ -51,7 +53,7 @@ const FileExplorer = () => {
 
   const newFolder = (e) => {
     e.stopPropagation();
-    console.log("here", e);
+    // console.log("here", e);
     let parentFolderId = e.target.dataset["directoryId"];
     let parentFolder = document.getElementById(getFolderId(parentFolderId));
 
@@ -98,6 +100,7 @@ const FileExplorer = () => {
 
   const newFile = (e) => {
     e.stopPropagation();
+    setParentFolderId(e.target.dataset["directoryId"]);
   };
 
   // Function to render a directory recursively
