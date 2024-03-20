@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import FileExplorer from "./components/FileExplorer/FileExplorer";
-import FileUploadController from "./components/AddFile/FileUploadController";
-import SharedDataContext from "./components/Contexts/SharedDataContext";
+import FileUploadComponent from "./components/AddFile/FileUploadComponent";
+import SharedDataContext from "./Contexts/SharedDataContext";
 
 export default function Home() {
   const [parentFolderId, setParentFolderId] = useState("");
@@ -17,9 +17,13 @@ export default function Home() {
         setResponseFileData,
       }}
     >
-      <div>
-        <FileExplorer />
-        <FileUploadController />
+      <div className="outerWrapper">
+        <div className="fileExplorer">
+          <FileExplorer />
+        </div>
+        <div className="fileUpload">
+          <FileUploadComponent />
+        </div>
       </div>
     </SharedDataContext.Provider>
   );

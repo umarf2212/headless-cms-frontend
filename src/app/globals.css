@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.outerWrapper {
+    display: flex;
+}
+
+.fileExplorer,
+.fileUpload {
+    padding: 20px;
+}
+
+.fileUpload {
+
+}

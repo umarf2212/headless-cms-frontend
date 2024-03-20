@@ -1,8 +1,8 @@
 import FileUpload from "./FileUpload";
 import React, { useContext, useEffect, useState } from "react";
-import SharedDataContext from "../Contexts/SharedDataContext";
+import SharedDataContext from "../../Contexts/SharedDataContext";
 
-const FileUploadController = () => {
+const FileUploadComponent = () => {
   const { parentFolderId, setResponseFileData, responseFileData } =
     useContext(SharedDataContext);
   const [uploadButtonDisabled, setUploadButtonDisabled] = useState(true);
@@ -51,10 +51,14 @@ const FileUploadController = () => {
         setResponseFileData={setResponseFileData}
         setUploadButtonDisabled={setUploadButtonDisabled}
       />
-      <button onClick={uploadFileData} disabled={uploadButtonDisabled}>
+      <button
+        onClick={uploadFileData}
+        disabled={uploadButtonDisabled}
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-4 cursor-pointer"
+      >
         Upload
       </button>
     </div>
   );
 };
-export default FileUploadController;
+export default FileUploadComponent;
