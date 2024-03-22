@@ -4,13 +4,24 @@
 
 .outerWrapper {
     display: flex;
+    height: 100vh;
 }
 
 .fileExplorer,
-.fileUpload {
+.fileViewer {
     padding: 20px;
 }
 
-.fileUpload {
 
+.fileExplorer {
+    overflow: scroll;
+    width: 35%;
+    height: 100%;
+    background-color: #c00e0e30;
+    padding-left: 50px;
+}
+
+.fileViewer {
+    background: #00cdff4a;
+    flex: 1;
 }

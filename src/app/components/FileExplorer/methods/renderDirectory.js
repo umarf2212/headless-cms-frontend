@@ -11,21 +11,23 @@ export const renderDirectory = (directory, level) => {
         {directory.name}
       </span>{" "}
       |
-      <span
-        data-directory-id={directory._id}
-        className="text-green-500 hover:text-green-700"
+      <img
+        src={"/folder.svg"}
+        width={20}
+        height={20}
+        className="inline mx-2"
         data-target-element-type="newFolder"
-      >
-        + folder
-      </span>{" "}
-      |{" "}
-      <span
         data-directory-id={directory._id}
-        className="text-green-500 hover:text-green-700 ml-2"
+      />
+      |{" "}
+      <img
+        data-directory-id={directory._id}
         data-target-element-type="newFile"
-      >
-        + file
-      </span>{" "}
+        src={"/file.svg"}
+        width={20}
+        height={20}
+        className="inline mx-2"
+      />
       {directory.directories && directory.directories.length > 0 && (
         <div
           className="subfolders"
@@ -45,6 +47,7 @@ export const renderDirectory = (directory, level) => {
               key={file._id}
               className="file"
               data-target-element-type="fileClick"
+              data-file-id={file._id}
             >
               {"─".repeat(level + 1)}
               {file.name}

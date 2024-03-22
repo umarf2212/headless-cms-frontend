@@ -5,15 +5,16 @@ import "./style.css";
 import SharedDataContext from "../../Contexts/SharedDataContext";
 import {
   toggleSubfolders,
-  handleFileClick,
+  fileClick,
   newFolder,
   renderDirectory,
   newFile,
 } from "./methods/";
+import { Loading } from "../Loading";
 
 const FileExplorer = () => {
   const [directory, setDirectory] = useState(null);
-  const { setParentFolderId } = useContext(SharedDataContext);
+  const { setParentFolderId, setFileDetails } = useContext(SharedDataContext);
 
   useEffect(() => {
     fetch("http://localhost:8000/api/directory/root")
@@ -39,15 +40,21 @@ const FileExplorer = () => {
         newFile(event, setParentFolderId);
         break;
       case "fileClick":
-        handleFileClick(event);
+        fileClick(event)
+          .then((result) => {
+            setFileDetails(result);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     }
   };
 
   return (
     <div id="fileExplorer">
-      <h2>File Explorer</h2>
+      <h2 className="text-3xl mb-6">File Explorer</h2>
       <div className="fileExplorerWrapper" onClick={handleClickEventDelegation}>
-        {directory && renderDirectory(directory, 0)}
+        {directory ? renderDirectory(directory, 0) : <Loading />}
       </div>
     </div>
   );
